@@ -9,34 +9,146 @@
 import UIKit
 
 protocol TVSpiderChartDelegate : class {
-    /*
-     func colorOfLineForRadarChart(_ radarChart: TKRadarChart) -> UIColor
-     func colorOfFillStepForRadarChart(_ radarChart: TKRadarChart, step: Int) -> UIColor
-     
-     func colorOfSectionFillForRadarChart(_ radarChart: TKRadarChart, section: Int) -> UIColor
-     func colorOfSectionBorderForRadarChart(_ radarChart: TKRadarChart, section: Int) -> UIColor
-     
-     func fontOfTitleForRadarChart(_ radarChart: TKRadarChart) -> UIFont
-     func colorOfTitleForRadarChart(_ radarChart: TKRadarChart) -> UIColor
-     */
+    
+    
+    /// Color of Line for chart
+    ///
+    /// - Parameter chart: TVSpiderChart
+    /// - Returns: UIColor
+    func colorOfLineForChart(_ chart : TVSpiderChart) -> UIColor
+    
+    
+    /// Color of Fill Step for chart
+    ///
+    /// - Parameter chart: TVSpiderChart
+    /// - Returns: UIColor
+    func colorOfFillStepForChart(_ chart : TVSpiderChart) -> UIColor
+    
+    
+    /// Color of section fill for chart
+    ///
+    /// - Parameter chart: TVSpiderChart
+    /// - Returns: UIColor
+    func colorOfSectionFillForChart(_ chart : TVSpiderChart) -> UIColor
+    
+    
+    /// Color of section border for chart
+    ///
+    /// - Parameter chart: TVSpiderChart
+    /// - Returns: UIColor
+    func colorOfSectionBorderForChart(_ chart : TVSpiderChart) -> UIColor
+    
+    
+    /// Font of title for chart
+    ///
+    /// - Parameter chart: TVSpiderChart
+    /// - Returns: UIFont
+    func fontOfTitleForChart(_ chart : TVSpiderChart) -> UIFont
+    
+    
+    /// Color of title for chart
+    ///
+    /// - Parameter chart: TVSpiderChart
+    /// - Returns: UIColor
+    func colorOfTileForChart(_ chart : TVSpiderChart) -> UIColor
+}
+
+
+// MARK: - Default implementation of TVSpiderChartDelegate
+extension TVSpiderChartDelegate {
+    
+    
+    public func colorOfLineForChart(_ chart: TVSpiderChart) -> UIColor {
+        return UIColor.yellow
+    }
+    
+    public func colorOfFillStepForChart(_ chart: TVSpiderChart) -> UIColor {
+        return UIColor.blue
+    }
+    
+    public func colorOfSectionFillForChart(_ chart: TVSpiderChart) -> UIColor {
+        return UIColor.green
+    }
+    
+    public func colorOfSectionBorderForChart(_ chart: TVSpiderChart) -> UIColor {
+        return UIColor.brown
+    }
+    
+    public func fontOfTitleForChart(_ chart: TVSpiderChart) -> UIFont {
+        return UIFont.boldSystemFont(ofSize: 12)
+    }
+    
+    public func colorOfTileForChart(_ chart: TVSpiderChart) -> UIColor {
+        return UIColor.black
+    }
 }
 
 protocol TVSpiderChartDataSource : class {
-    /*
-    func numberOfStepForRadarChart(_ radarChart: TKRadarChart) -> Int
-    func numberOfRowForRadarChart(_ radarChart: TKRadarChart) -> Int
-    func numberOfSectionForRadarChart(_ radarChart: TKRadarChart) -> Int
+   
     
-    func titleOfRowForRadarChart(_ radarChart: TKRadarChart, row: Int) -> String
-    func valueOfSectionForRadarChart(withRow row: Int, section: Int) -> CGFloat
- */
+    /// Number of sections for chart
+    ///
+    /// - Parameter chart: TVSpiderChart
+    /// - Returns: Int value
+    func numberOfSectionsForChart(_ chart : TVSpiderChart) -> Int
     
-    func numberOfSectionsForSpiderChart(_ chart : TVSpiderChart) -> Int
     
-    func numberOfRowsForSpiderChart(_ chart : TVSpiderChart) -> Int
+    /// Number of rows for chart
+    ///
+    /// - Parameter chart: TVSpiderChart
+    /// - Returns: Int value
+    func numberOfRowsForChart(_ chart : TVSpiderChart) -> Int
     
-    func numberOfStepsForSpiderChart(_ chart : TVSpiderChart) -> Int
     
+    /// Number of steps for chart
+    ///
+    /// - Parameter chart: TVSpiderChart
+    /// - Returns: Int value
+    func numberOfStepsForChart(_ chart : TVSpiderChart) -> Int
+    
+    
+    /// Title of row for chart
+    ///
+    /// - Parameters:
+    ///   - chart: TVSpiderChart
+    ///   - row: Row index
+    /// - Returns: String value
+    func titleOfRowForChart(_ chart : TVSpiderChart, atRow row : Int) -> String
+    
+    
+    /// Value of section for chart
+    ///
+    /// - Parameters:
+    ///   - chart: TVSpiderChart
+    ///   - row: Row
+    ///   - section: Section
+    /// - Returns: CGFloat value
+    func valueOfSectionForChart(_ chart : TVSpiderChart, atRow row : Int, section : Int) -> CGFloat
+    
+}
+
+
+// MARK: - Default implementation of TVSpiderChartDataSource
+extension TVSpiderChartDataSource {
+    public func numberOfSectionsForChart(_ chart : TVSpiderChart) -> Int {
+        return 1
+    }
+    
+    public func numberOfRowsForChart(_ chart : TVSpiderChart) -> Int {
+        return 6
+    }
+    
+    public func numberOfStepsForChart(_ chart : TVSpiderChart) -> Int {
+        return 1
+    }
+    
+    public func titleOfRowForChart(_ chart : TVSpiderChart, atRow row : Int) -> String {
+        return "\(row)"
+    }
+    
+    public func valueOfSectionForChart(_ chart : TVSpiderChart, atRow row : Int, section : Int) -> CGFloat {
+        return 1
+    }
 }
 
 struct TVSpiderChartConfiguration {
@@ -55,6 +167,7 @@ struct TVSpiderChartConfiguration {
     public var fillArea: Bool
     public var clockwise: Bool
     public var autoCenterPoint: Bool
+    public var centerOffset : CGFloat
 
     
     static func defaultConfig() -> TVSpiderChartConfiguration {
@@ -74,9 +187,10 @@ struct TVSpiderChartConfiguration {
         self.fillArea = true
         self.clockwise = false
         self.autoCenterPoint = true
+        self.centerOffset = 10.0
     }
     
-    init(radius : CGFloat, minValue : CGFloat, maxValue : CGFloat, borderWidth : CGFloat, lineWidth : CGFloat, showPoint : Bool, showBorder : Bool, showBackgroundLine : Bool, showBackgroundBorder : Bool, fillArea : Bool, clockwise : Bool, autoCenterPoint : Bool) {
+    init(radius : CGFloat, minValue : CGFloat, maxValue : CGFloat, borderWidth : CGFloat, lineWidth : CGFloat, showPoint : Bool, showBorder : Bool, showBackgroundLine : Bool, showBackgroundBorder : Bool, fillArea : Bool, clockwise : Bool, autoCenterPoint : Bool, centerOffset : CGFloat) {
         self.radius = radius
         self.minValue = minValue
         self.maxValue = maxValue
@@ -89,10 +203,13 @@ struct TVSpiderChartConfiguration {
         self.fillArea = fillArea
         self.clockwise = clockwise
         self.autoCenterPoint = autoCenterPoint
+        self.centerOffset = centerOffset
     }
 }
 
-class TVSpiderChart: UIView {
+class TVSpiderChart: UIView, TVSpiderChartDelegate, TVSpiderChartDataSource {
+    
+    
 
     public weak var dataSource : TVSpiderChartDataSource?
     public weak var delegate : TVSpiderChartDelegate?
@@ -120,19 +237,21 @@ class TVSpiderChart: UIView {
     
     override convenience init(frame: CGRect) {
         self.init(rect: frame, config: TVSpiderChartConfiguration.defaultConfig())
-        
-        
     }
     
     required init?(coder aDecoder: NSCoder) {
+        centerPoint = .zero
         configuration = TVSpiderChartConfiguration.defaultConfig()
         super.init(coder: aDecoder)
-        
+        centerPoint = CGPoint.init(x: frame.width/2, y: frame.height/2)
+        backgroundColor = .clear
     }
     
     init(rect : CGRect, config : TVSpiderChartConfiguration) {
+        centerPoint = CGPoint.init(x: rect.width/2, y: rect.height/2)
         self.configuration = config
         super.init(frame: rect)
+        backgroundColor = .clear
     }
     
     
@@ -146,51 +265,52 @@ class TVSpiderChart: UIView {
         super.draw(rect)
         self.backgroundColor = .red
         /// Get current graphic context and datasource
-//        guard let ds = dataSource, let currentContext = UIGraphicsGetCurrentContext() else {
-//            return
-//        }
         guard let currentContext = UIGraphicsGetCurrentContext() else { return }
-        
+        let myDs = self.dataSource ?? self
+        self.centerPoint = CGPoint.init(x: rect.width/2, y: rect.height/2)
+        print("center point: \(centerPoint)")
+        let myDelegate = self.delegate ?? self
+    
+        /// draw background
+        self.drawBackgroundRectangles(context: currentContext, ds: myDs, dlg: myDelegate)
         
         /// Draw titles
-        self.drawTitles(frame: rect, context: currentContext)
-        
-        
-        /// draw background
-        self.drawBackgroundRectangles(context: currentContext)
+        self.drawTitles(frame: rect, context: currentContext, ds: myDs, dlg: myDelegate)
         
         /// draw background lines
-        self.drawBackgroundLines(context: currentContext)
+        self.drawBackgroundLines(context: currentContext, ds: myDs, dlg: myDelegate)
         
         /// draw sections
-        self.drawSections(context: currentContext)
+//        self.drawSections(context: currentContext, ds: myDs, dlg: myDelegate)
         
     }
     
-    private func drawTitles(frame : CGRect, context : CGContext) {
-//        guard let ds = dataSource else { return }
-        let numberOfRows = 5
-        
-        let titleColor = UIColor.black
+    
+    
+    /// Draw titles on the spider chart
+    private func drawTitles(frame : CGRect, context : CGContext, ds : TVSpiderChartDataSource, dlg : TVSpiderChartDelegate) {
+        let numberOfRows =  ds.numberOfRowsForChart(self)
+        let titleColor = dlg.colorOfTileForChart(self)
         
         let radius = configuration.radius
         let perAngle = CGFloat.pi * 2 / CGFloat(numberOfRows) * CGFloat(configuration.clockwise ? 1 : -1)
-        let padding : CGFloat = 2.0
-        let textFont = UIFont.boldSystemFont(ofSize: 12)
+        let padding : CGFloat = 10.0
+        let textFont = dlg.fontOfTitleForChart(self)
         let height = textFont.lineHeight
         
         for i in 0..<numberOfRows {
-            let title = "\(i)"
+            let title = ds.titleOfRowForChart(self, atRow: i)
             let index = CGFloat(i)
             let pointOnEdge = CGPoint.init(x: centerPoint.x - radius*sin(index*perAngle), y: centerPoint.y - radius*cos(index*perAngle))
             
-            let attributeTextSize = (title as NSString).size(withAttributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 12)])
+            let attributeTextSize = (title as NSString).size(withAttributes: [NSAttributedString.Key.font : textFont])
             
             let width = attributeTextSize.width
-            let xOffset = pointOnEdge.x >= centerPoint.x ? (width/2.0 + padding) : (-width/2.0 - padding)
-            let yOffset = pointOnEdge.y >= centerPoint.y ? (height/2.0 + padding) : (-height/2.0 - padding)
+            let xOffset = pointOnEdge.x >= centerPoint.x ? (width/2.0 + padding) : (-width/2.0) - padding
+            let yOffset = pointOnEdge.y >= centerPoint.y ? (height/2.0 + padding) : (-height/2.0) - padding
+//            let yOffset : CGFloat = 0
             var legendCenter = CGPoint.init(x: pointOnEdge.x + xOffset, y: pointOnEdge.y + yOffset)
-            
+            print("index: \(i)\txOffset: \(xOffset)\tyOffset:\(yOffset)")
             let paragraphStyle = NSMutableParagraphStyle.init()
             paragraphStyle.alignment = .center
             paragraphStyle.lineBreakMode = .byClipping
@@ -198,14 +318,20 @@ class TVSpiderChart: UIView {
                         NSAttributedString.Key.paragraphStyle : paragraphStyle,
                         NSAttributedString.Key.foregroundColor : titleColor]
             
-            if index == 0 ||
-                (numberOfRows%2 == 0 && i == numberOfRows%2) {
+            if i == 0 ||
+                (numberOfRows%2 == 0 && i == numberOfRows/2) {
                 legendCenter.x = centerPoint.x
                 legendCenter.y = centerPoint.y + (radius + padding + height/2.0) * CGFloat(i == 0 ? -1 : 1)
             }
             
-            let rect = CGRect.init(x: (legendCenter.x - width)/2.0, y: (legendCenter.y - height/2.0), width: width, height: height)
+            
+            if i == 1 || (i == 4) {
+                legendCenter.y = centerPoint.y
+            }
+            
+            let rect = CGRect.init(x: (legendCenter.x - width/2), y: (legendCenter.y - height/2.0), width: width, height: height)
             (title as NSString).draw(in: rect, withAttributes: atts)
+            
         }
         
         context.saveGState()
@@ -217,11 +343,11 @@ class TVSpiderChart: UIView {
     /// - Parameters:
     ///   - rect: CGRect
     ///   - context: CGContext
-    private func drawBackgroundRectangles(context : CGContext) {
+    private func drawBackgroundRectangles(context : CGContext, ds : TVSpiderChartDataSource, dlg : TVSpiderChartDelegate) {
         
-        let numberOfSteps = 5
-        let numberOfRows = 5
-        let lineColor = UIColor.blue
+        let numberOfSteps = ds.numberOfStepsForChart(self)
+        let numberOfRows = ds.numberOfRowsForChart(self)
+        let lineColor = dlg.colorOfLineForChart(self)
         let perAngle = CGFloat.pi * 2 / CGFloat(numberOfRows) * CGFloat(configuration.clockwise ? 1 : -1)
         lineColor.setStroke()
         
@@ -229,22 +355,22 @@ class TVSpiderChart: UIView {
         
         for stepIndex in 1...numberOfSteps {
             let step = numberOfSteps - stepIndex + 1
-            let fillColor = UIColor.yellow
+            let fillColor = dlg.colorOfFillStepForChart(self)
             let scale = CGFloat(step)/CGFloat(numberOfSteps)
-            let innerRadus = scale*radius
-            
+            let innerRadius = scale*radius
+
             let path = UIBezierPath()
             for index in 0...numberOfRows {
                 let i = CGFloat(index)
                 var x = centerPoint.x
-                var y = centerPoint.y - innerRadus
+                var y = centerPoint.y - innerRadius
                 if index == 0 {
                     path.move(to: CGPoint.init(x: x, y: y))
                 } else if index == numberOfRows {
                     path.addLine(to: CGPoint.init(x: x, y: y))
                 } else {
-                    x = centerPoint.x - innerRadus*sin(i*perAngle)
-                    y = centerPoint.y - innerRadus*cos(i*perAngle)
+                    x = centerPoint.x - innerRadius*sin(i*perAngle)
+                    y = centerPoint.y - innerRadius*cos(i*perAngle)
                     path.addLine(to: CGPoint.init(x: x, y: y))
                 }
             }
@@ -262,12 +388,13 @@ class TVSpiderChart: UIView {
         context.saveGState()
     }
     
-    private func drawBackgroundLines(context : CGContext) {
+    /// Draw background lines on the spider chart
+    private func drawBackgroundLines(context : CGContext, ds : TVSpiderChartDataSource, dlg : TVSpiderChartDelegate) {
         guard configuration.showBackgroundLine else { return }
-        let numberOfRows = 5
+        let numberOfRows = ds.numberOfRowsForChart(self)
         let perAngle = CGFloat.pi * 2 / CGFloat(numberOfRows) * CGFloat(configuration.clockwise ? 1 : -1)
         let radius = configuration.radius
-        let lineColor = UIColor.blue
+        let lineColor = dlg.colorOfLineForChart(self)
         
         lineColor.setStroke()
         for index in 0..<numberOfRows {
@@ -282,17 +409,18 @@ class TVSpiderChart: UIView {
         }
     }
     
-    private func drawSections(context : CGContext) {
-        let numberOfRows = 5
-        let numberOfSections = 5
+    /// Draw data
+    private func drawSections(context : CGContext, ds : TVSpiderChartDataSource, dlg : TVSpiderChartDelegate) {
+        let numberOfRows = ds.numberOfRowsForChart(self)
+        let numberOfSections = ds.numberOfSectionsForChart(self)
         let radius = configuration.radius
         let minValue = configuration.minValue
         let maxValue = configuration.maxValue
         let perAngle = CGFloat.pi * 2 / CGFloat(numberOfRows) * CGFloat(configuration.clockwise ? 1 : -1)
         
         for section in 0..<numberOfSections {
-            let fillColor = UIColor.gray
-            let borderColor = UIColor.green
+            let fillColor = dlg.colorOfSectionFillForChart(self)
+            let borderColor = dlg.colorOfSectionBorderForChart(self)
             
             let path = UIBezierPath()
             for index in 0..<numberOfRows {
@@ -327,15 +455,15 @@ class TVSpiderChart: UIView {
                 path.stroke()
             }
 
-            self.drawPoints(context: context)
+            self.drawPoints(context: context, ds: ds, dlg: dlg)
         }
     }
     
-    private func drawPoints(context : CGContext) {
+    private func drawPoints(context : CGContext, ds : TVSpiderChartDataSource, dlg : TVSpiderChartDelegate) {
         guard configuration.showPoint else { return }
         let borderColor = UIColor.black
-        let numberOfRows = 5
-        let numberOfSections = 5
+        let numberOfRows = ds.numberOfRowsForChart(self)
+        let numberOfSections = ds.numberOfSectionsForChart(self)
         let radius = configuration.radius
         let minValue = configuration.minValue
         let maxValue = configuration.maxValue
